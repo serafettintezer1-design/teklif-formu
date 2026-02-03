@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teklif Formu - Serafettin Tezer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .header-center {
+            text-align: center;
+            flex: 1;
+            margin-top: 20px;
+        }
+        
+        .header-left h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .company-logo {
+            width: 400px;
+            height: auto;
+            max-width: none;
+            max-height: none;
+            object-fit: contain;
+            display: block;
+        }
+        
+        .header-left h1:hover {
+            color: #007bff;
+        }
+        
+        .header-left p {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        
+        .header-left .phone {
+            color: #007bff;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        
+        .header-right {
+            text-align: right;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .project-inline {
+            margin-top: 10px;
+        }
+
+        .project-inline label {
+            display: block;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+
+        .project-inline input {
+            width: 320px;
+            font-size: 14px;
+            padding: 6px 8px;
+        }
+        
+        .header-center h2 {
+            font-size: 24px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .header-right .date {
+            font-size: 12px;
+            margin-top: 0;
+        }
+
+        .header-right .date input[type="date"] {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            background: transparent;
+            font-size: 12px;
+            padding: 0;
+            margin-left: 6px;
+            width: 110px;
+            color: #000;
+        }
+
+        .currency-select {
+            margin-top: 6px;
+            font-size: 12px;
+        }
+
+        .currency-select select {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 4px 6px;
+            font-size: 12px;
+            background: #fff;
+        }
+        
+        .logos {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .logos img {
+            max-height: 50px;
+            max-width: 120px;
+            object-fit: contain;
+        }
+
+        .product-logos {
+            width: 100%;
+            max-height: 50px;
+            object-fit: contain;
+            display: block;
+            margin: 5px 0 3px 0;
+        }
+        
+        .form-section {
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group.full {
+            grid-template-columns: 1fr;
+        }
+        
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #333;
+        }
+        
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        .products-table thead {
+            background-color: #f8f9fa;
+        }
+        
+        .products-table th {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: left;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        .products-table td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            font-size: 11px;
+        }
+        
+        .products-table tbody td:first-child {
+            width: 40%;
+            max-width: 40%;
+        }
+
+        .products-table .total-col {
+            display: table-cell;
+        }
+        
+        .row-currency {
+            display: block;
+            text-align: center;
+        }
+        
+        .products-table input {
+            width: 100%;
+            padding: 3px 5px;
+            border: none;
+            border-bottom: 1px solid #ddd;
+            font-size: 11px;
+        }
+        
+        .products-table input:disabled {
+            background-color: #f8f9fa;
+        }
+        
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+        
+        .add-product-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin: 8px 0;
+        }
+        
+        .add-product-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        .summary-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        
+        .summary-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .summary-row label {
+            margin-bottom: 0;
+        }
+        
+        .summary-row input {
+            padding: 10px;
+        }
+        
+        .currency-conversion {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .conversion-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+        }
+        
+        .conversion-row label {
+            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+        }
+        
+        .conversion-row input {
+            width: 50px;
+            padding: 3px 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        
+        .conversion-result {
+            background-color: #e3f2fd;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        
+        .update-rates-btn {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            margin-left: 10px;
+        }
+        
+        .update-rates-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .notes-section {
+            margin-top: 20px;
+        }
+        
+        .notes-section p {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .action-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 10px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .btn-print {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .btn-print:hover {
+            background-color: #218838;
+        }
+        
+        .btn-reset {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .btn-reset:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-save {
+            background-color: #ffc107;
+            color: black;
+        }
+        
+        .btn-save:hover {
+            background-color: #e0a800;
+        }
+        
+        .draft-management {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .draft-management h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .draft-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .draft-controls input {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 11px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .draft-controls button {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        
+        .draft-controls button:hover {
+            background-color: #0056b3;
+        }
+        
+        .draft-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 8px;
+        }
+        
+        .draft-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 11px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .draft-item:hover {
+            background-color: #e3f2fd;
+            border-color: #007bff;
+        }
+        
+        .draft-item-name {
+            font-weight: bold;
+            color: #007bff;
+        }
+        
+        .draft-item-date {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .draft-item-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .draft-btn-load {
+            flex: 1;
+            padding: 3px 6px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .draft-btn-load:hover {
+            background-color: #218838;
+        }
+        
+        .draft-btn-delete {
+            flex: 1;
+            padding: 3px 6px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .draft-btn-delete:hover {
+            background-color: #c82333;
+        }
+        
+        /* Mobil Responsive */
+        @media (max-width: 768px) {
+            .draft-controls {
+                flex-direction: column;
+            }
+            
+            .draft-controls input {
+                min-width: 100%;
+            }
+            
+            .draft-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Mobil Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+                max-width: 100%;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding-bottom: 10px;
+                margin-bottom: 15px;
+            }
+            
+            .header-left {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .company-logo {
+                width: 200px;
+                margin: 0 auto;
+            }
+            
+            .header-center {
+                width: 100%;
+                margin-top: 10px;
+            }
+            
+            .header-right {
+                position: relative;
+                top: auto;
+                right: auto;
+                width: 100%;
+                text-align: center;
+                margin-top: 10px;
+            }
+            
+            .project-inline input {
+                width: 100%;
+            }
+            
+            .logos {
+                gap: 10px;
+                margin: 10px 0;
+            }
+            
+            .logos img {
+                max-height: 40px;
+            }
+            
+            .product-logos {
+                max-height: 40px;
+                margin: 3px 0 2px 0;
+            }
+            
+            .products-table {
+                margin: 5px 0;
+            }
+            
+            .products-table th,
+            .products-table td {
+                padding: 3px;
+                font-size: 10px;
+            }
+            
+            .products-table tbody td:first-child {
+                width: 50%;
+                max-width: 50%;
+            }
+            
+            .products-table input {
+                padding: 2px 3px;
+                font-size: 10px;
+            }
+            
+            .products-table input[type="number"] {
+                padding: 2px;
+            }
+            
+            .add-product-btn {
+                padding: 6px 12px;
+                font-size: 10px;
+                margin: 5px 0;
+            }
+            
+            .summary-section {
+                padding: 10px;
+                margin-top: 5px;
+            }
+            
+            .summary-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
+                margin-bottom: 5px;
+            }
+            
+            .summary-row label {
+                font-size: 10px;
+            }
+            
+            .summary-row input {
+                padding: 5px;
+                font-size: 10px;
+            }
+            
+            .currency-conversion {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-top: 8px;
+                padding-top: 8px;
+            }
+            
+            .conversion-row {
+                font-size: 10px;
+                gap: 5px;
+            }
+            
+            .conversion-row input {
+                width: 40px;
+                padding: 2px 3px;
+                font-size: 10px;
+            }
+            
+            .conversion-result {
+                padding: 3px 6px;
+                font-size: 10px;
+            }
+            
+            .notes-section {
+                margin-top: 10px;
+            }
+            
+            .notes-section h3 {
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+            
+            .notes-section p {
+                font-size: 10px;
+                line-height: 1.4;
+            }
+            
+            textarea {
+                font-size: 10px;
+                min-height: 40px;
+            }
+            
+            .action-buttons {
+                margin-top: 15px;
+                gap: 5px;
+                flex-wrap: wrap;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 11px;
+            }
+            
+            .form-group {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+        
+        @page {
+            margin: 0;
+            size: auto;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 1cm;
+            }
+            .header {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: flex-start !important;
+                justify-content: center !important;
+                position: relative !important;
+                margin-bottom: 30px !important;
+            }
+            .header-left {
+                position: absolute !important;
+                left: 0 !important;
+                width: auto !important;
+                text-align: left !important;
+                flex: 0 0 auto;
+            }
+            .header-center {
+                flex: 0 0 auto !important;
+                margin-top: 20px !important;
+                width: auto !important;
+                text-align: center !important;
+            }
+            .header-right {
+                position: absolute !important;
+                top: 0 !important;
+                right: 0 !important;
+                width: auto !important;
+                text-align: right !important;
+                font-size: 11px !important;
+            }
+            .company-logo {
+                width: 250px !important;
+            }
+            .project-inline {
+                display: block !important;
+                margin-top: 0 !important;
+                text-align: center !important;
+            }
+            .project-inline label {
+                display: none;
+            }
+            .project-inline input {
+                border: none !important;
+                background: transparent !important;
+                width: auto !important;
+                text-align: center !important;
+                font-size: 14px !important;
+                font-weight: bold !important;
+                padding: 0 !important;
+            }
+            .action-buttons {
+                display: none;
+            }
+            .draft-management {
+                display: none;
+            }
+            .add-product-btn {
+                display: none;
+            }
+            .delete-btn {
+                display: none;
+            }
+            .currency-select {
+                display: none;
+            }
+            .conversion-row label,
+            .conversion-row input,
+            .update-rates-btn {
+                display: none;
+            }
+            .conversion-row {
+                justify-content: center;
+            }
+            .currency-conversion {
+                grid-template-columns: 1fr 1fr 1fr !important;
+                gap: 15px;
+            }
+            .products-table .cost-price-col,
+            .products-table .percentage-col {
+                display: none;
+            }
+            .summary-row {
+                grid-template-columns: 2fr 1fr 1fr !important;
+            }
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <img class="company-logo" src="logo.png" alt="Şerafettin Tezer Logo">
+            </div>
+            <div class="header-center">
+                <h2>Teklif Formu</h2>
+                <div class="project-inline">
+                    <label for="projectName">Proje Adı:</label>
+                    <input type="text" id="projectName" name="projectName">
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="date">
+                    Tarih:
+                    <input type="date" id="dateInput" name="dateInput">
+                </div>
+                <div class="currency-select">
+                    Para Birimi:
+                    <select id="currencySelect" name="currencySelect" onchange="updateCurrency()">
+                        <option value="TRY">₺ TL</option>
+                        <option value="USD">$ USD</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Logos -->
+        <div class="logos">
+            <img src="uniwiz-logo.png" alt="Uniwiz" onerror="this.style.display='none'">
+            <img src="dahua-logo.png" alt="Dahua" onerror="this.style.display='none'">
+            <img src="hilook-logo.png" alt="HiLook" onerror="this.style.display='none'">
+            <img src="hikvision-logo.png" alt="Hikvision" onerror="this.style.display='none'">
+            <img src="uniview-logo.png" alt="Uniview" onerror="this.style.display='none'">
+        </div>
+        
+        <!-- Form Section -->
+        <form id="teklifForm">
+            <!-- Products Table -->
+            <div class="form-section" style="margin-top: -10px;">
+                <img class="product-logos" src="urun_logolar.png" alt="Ürün Logoları">
+                <h3 style="margin-bottom: 15px;">Ürünler</h3>
+                
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Ürün Adı</th>
+                            <th style="width: 40px;">Adet</th>
+                            <th>Birim</th>
+                            <th class="cost-price-col">Alış Fiyatı (<span class="currency-symbol">₺</span>)</th>
+                            <th class="percentage-col">Yüzde (%)</th>
+                            <th>Birim Fiyatı (<span class="currency-symbol">₺</span>)</th>
+                            <th class="total-col">Toplam (<span class="currency-symbol">₺</span>)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsBody">
+                        <!-- Ürünler buraya ekleniyor -->
+                    </tbody>
+                </table>
+                
+                <button type="button" class="add-product-btn" onclick="addProduct()">+ Ürün Ekle</button>
+                <button type="button" class="add-product-btn" onclick="removeLastProduct()">- Ürün Çıkar</button>
+            </div>
+            
+            <!-- Summary -->
+            <div class="summary-section">
+                <div class="summary-row">
+                    <label><strong>Genel Toplam:</strong></label>
+                    <input type="text" id="generalTotal" disabled>
+                    <span class="currency-symbol">₺</span>
+                </div>
+                
+                <div class="summary-row">
+                    <label><strong>KDV (20%):</strong></label>
+                    <input type="text" id="kdvAmount" disabled>
+                    <span class="currency-symbol">₺</span>
+                </div>
+                
+                <div class="summary-row" style="border-top: 2px solid #ddd; padding-top: 15px;">
+                    <label><strong>Genel Toplam + KDV:</strong></label>
+                    <input type="text" id="finalTotal" disabled style="font-weight: bold; background-color: #fff3cd;">
+                    <span class="currency-symbol">₺</span>
+                </div>
+                
+                <div class="currency-conversion">
+                    <div class="conversion-row">
+                        <label>1 USD = <input type="number" id="usdRate" value="44" onchange="convertCurrency()"> ₺</label>
+                        <span class="conversion-result" id="usdTotal">0.00 USD</span>
+                    </div>
+                    <div class="conversion-row">
+                        <label>1 EUR = <input type="number" id="eurRate" value="52" onchange="convertCurrency()"> ₺</label>
+                        <span class="conversion-result" id="eurTotal">0.00 EUR</span>
+                    </div>
+                    <div class="conversion-row">
+                        <label>TL Karşılığı:</label>
+                        <span class="conversion-result" id="tlTotal">0.00 ₺</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notes -->
+            <div class="notes-section">
+                <h3 style="margin-bottom: 10px;">Notlar</h3>
+                <textarea id="notes" placeholder="Teklif ile ilgili notları yazınız..."></textarea>
+                
+                <p style="margin-top: 15px;">
+                    <strong>Teklifimiz ile ilgili tüm sorularınızı yanıtlamaktan memnuniyet duyarız. Saygılarımızla,</strong><br>
+                    <strong>Teklifimiz, tarafınıza sunulduğu tarihten itibaren 1 (bir) hafta süreyle geçerlidir</strong><br>
+                    <strong>İş sonunda kullanılmayan kablo kanal ve benzeri malzemeler, toplam tutardan düşülecektir.</strong><br>
+                    <strong>Döviz işlemlerinde, Türkiye Cumhuriyet Merkez Bankası tarafından ilan edilen efektif satış kuru dikkate alınır.</strong>
+                </p>
+            </div>
+            
+            <!-- Draft Management -->
+            <div class="draft-management">
+                <h3>📋 Taslak Yönetimi</h3>
+                <div class="draft-controls">
+                    <input type="text" id="draftName" placeholder="Taslak adı girin (örn: Proje A)">
+                    <button onclick="saveDraftAs()">💾 Farklı Kaydet</button>
+                    <button onclick="loadDraftsList()">🔄 Listele</button>
+                </div>
+                <div class="draft-list" id="draftList"></div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-save" onclick="saveData()">💾 Kaydet</button>
+                <button type="button" class="btn btn-print" onclick="window.print()">🖨️ Yazdır</button>
+                <button type="reset" class="btn btn-reset">🔄 Sıfırla</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // Tarih Otomatik Ayarla
+        function toggleProjectInlineForPrint(hide) {
+            const projectInline = document.querySelector('.project-inline');
+            const projectValue = document.getElementById('projectName').value.trim();
+            if (hide && !projectValue) {
+                projectInline.style.display = 'none';
+            } else {
+                projectInline.style.display = '';
+            }
+        }
+
+        function updateCurrency() {
+            const currencySelect = document.getElementById('currencySelect');
+            const symbol = currencySelect.value === 'USD' ? '$' : '₺';
+            document.querySelectorAll('.currency-symbol').forEach(el => {
+                el.textContent = symbol;
+            });
+            document.querySelectorAll('.row-currency').forEach(el => {
+                el.textContent = symbol;
+            });
+            convertCurrency();
+        }
+        
+        // Ürün Ekle
+        function addProduct() {
+            const tbody = document.getElementById('productsBody');
+            const rowCount = tbody.rows.length + 1;
+            
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td><input type="text" placeholder="Ürün adını yazınız" class="productName"></td>
+                <td><input type="number" value="1" min="1" class="quantity" onchange="calculateTotal(this)" style="width: 35px;"></td>
+                <td><span class="row-currency">₺</span></td>
+                <td class="cost-price-col"><input type="number" placeholder="0.00" class="costPrice" onchange="calculateUnitPrice(this)"></td>
+                <td class="percentage-col"><input type="number" placeholder="0" class="percentage" value="0" onchange="calculateUnitPrice(this)"></td>
+                <td><input type="number" placeholder="0.00" class="unitPrice" onchange="calculateTotal(this)"></td>
+                <td class="total-col"><input type="text" class="totalPrice" disabled style="background-color: #f8f9fa;"></td>
+            `;
+            updateCurrency();
+        }
+        
+        // Alış Fiyatı ve Yüzde'den Birim Fiyatı Hesapla
+        function calculateUnitPrice(element) {
+            const row = element.closest('tr');
+            const costPrice = parseFloat(row.querySelector('.costPrice').value) || 0;
+            const percentage = parseFloat(row.querySelector('.percentage').value) || 0;
+            const unitPrice = (costPrice * (100 + percentage) / 100).toFixed(2);
+            
+            row.querySelector('.unitPrice').value = unitPrice;
+            calculateTotal(row.querySelector('.unitPrice'));
+        }
+        
+        // Satır Toplamı Hesapla
+        function calculateTotal(element) {
+            const row = element.closest('tr');
+            const quantity = parseFloat(row.querySelector('.quantity').value) || 0;
+            const unitPrice = parseFloat(row.querySelector('.unitPrice').value) || 0;
+            const total = (quantity * unitPrice).toFixed(2);
+            
+            row.querySelector('.totalPrice').value = total;
+            calculateGrandTotal();
+        }
+        
+        // Genel Toplam Hesapla
+        function calculateGrandTotal() {
+            const rows = document.querySelectorAll('#productsBody tr');
+            let grandTotal = 0;
+            
+            rows.forEach(row => {
+                const total = parseFloat(row.querySelector('.totalPrice').value) || 0;
+                grandTotal += total;
+            });
+            
+            const kdv = grandTotal * 0.20;
+            const finalTotal = grandTotal + kdv;
+            
+            document.getElementById('generalTotal').value = grandTotal.toFixed(2);
+            document.getElementById('kdvAmount').value = kdv.toFixed(2);
+            document.getElementById('finalTotal').value = finalTotal.toFixed(2);
+            convertCurrency();
+        }
+        
+        // TCMB'den Güncel Kurları Çek
+        async function fetchExchangeRates() {
+            try {
+                // TCMB XML API'sinden kur verilerini çek
+                const response = await fetch('https://www.tcmb.gov.tr/kurlar/today.xml');
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                
+                // USD ve EUR kurlarını bul
+                const currencies = xmlDoc.getElementsByTagName('Currency');
+                
+                for (let currency of currencies) {
+                    const code = currency.getAttribute('CurrencyCode');
+                    const forexSelling = currency.getElementsByTagName('ForexSelling')[0];
+                    
+                    if (code === 'USD' && forexSelling) {
+                        document.getElementById('usdRate').value = parseFloat(forexSelling.textContent).toFixed(2);
+                    } else if (code === 'EUR' && forexSelling) {
+                        document.getElementById('eurRate').value = parseFloat(forexSelling.textContent).toFixed(2);
+                    }
+                }
+                
+                convertCurrency();
+                alert('Kurlar başarıyla güncellendi!');
+            } catch (error) {
+                console.error('Kur güncellemesi başarısız:', error);
+                alert('Kurlar güncellenemedi. Lütfen manuel olarak girin veya internet bağlantınızı kontrol edin.');
+            }
+        }
+        
+        // Dolar ve Euro Dönüşümü Hesapla
+        function convertCurrency() {
+            const finalTotal = parseFloat(document.getElementById('finalTotal').value) || 0;
+            const currency = document.getElementById('currencySelect').value;
+            const usdRate = parseFloat(document.getElementById('usdRate').value) || 1;
+            const eurRate = parseFloat(document.getElementById('eurRate').value) || 1;
+            
+            let usdAmount, eurAmount, tlAmount;
+            
+            if (currency === 'USD') {
+                // Para birimi USD ise, final total zaten USD cinsinden
+                usdAmount = finalTotal.toFixed(2);
+                eurAmount = (finalTotal * usdRate / eurRate).toFixed(2);
+                tlAmount = (finalTotal * usdRate).toFixed(2);
+            } else if (currency === 'EUR') {
+                // Para birimi EUR ise, final total zaten EUR cinsinden
+                eurAmount = finalTotal.toFixed(2);
+                usdAmount = (finalTotal * eurRate / usdRate).toFixed(2);
+                tlAmount = (finalTotal * eurRate).toFixed(2);
+            } else {
+                // Para birimi TRY ise, normal döviz hesabı yap
+                usdAmount = (finalTotal / usdRate).toFixed(2);
+                eurAmount = (finalTotal / eurRate).toFixed(2);
+                tlAmount = finalTotal.toFixed(2);
+            }
+            
+            document.getElementById('usdTotal').textContent = usdAmount + ' USD';
+            document.getElementById('eurTotal').textContent = eurAmount + ' EUR';
+            document.getElementById('tlTotal').textContent = tlAmount + ' ₺';
+        }
+        
+        // Ürün Sil
+        function deleteProduct(button) {
+            button.closest('tr').remove();
+            calculateGrandTotal();
+        }
+
+        // Son ürünü çıkar
+        function removeLastProduct() {
+            const rows = document.querySelectorAll('#productsBody tr');
+            if (rows.length > 0) {
+                rows[rows.length - 1].remove();
+                calculateGrandTotal();
+            }
+        }
+        
+        // Taslak Yönetimi Fonksiyonları
+        function saveDraftAs() {
+            const draftName = document.getElementById('draftName').value.trim();
+            if (!draftName) {
+                alert('Lütfen taslak adı girin!');
+                return;
+            }
+            
+            const data = {
+                projectName: document.getElementById('projectName').value,
+                dateInput: document.getElementById('dateInput').value,
+                currency: document.getElementById('currencySelect').value,
+                notes: document.getElementById('notes').value,
+                products: []
+            };
+            
+            document.querySelectorAll('#productsBody tr').forEach(row => {
+                data.products.push({
+                    name: row.querySelector('.productName').value,
+                    quantity: row.querySelector('.quantity').value,
+                    costPrice: row.querySelector('.costPrice').value,
+                    percentage: row.querySelector('.percentage').value,
+                    unitPrice: row.querySelector('.unitPrice').value,
+                    total: row.querySelector('.totalPrice').value
+                });
+            });
+            
+            let drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
+            drafts[draftName] = {
+                data: data,
+                savedAt: new Date().toLocaleString('tr-TR')
+            };
+            
+            localStorage.setItem('teklifDrafts', JSON.stringify(drafts));
+            document.getElementById('draftName').value = '';
+            alert(draftName + ' taslağı kaydedildi!');
+            loadDraftsList();
+        }
+        
+        function loadDraftsList() {
+            const drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
+            const draftList = document.getElementById('draftList');
+            
+            if (Object.keys(drafts).length === 0) {
+                draftList.innerHTML = '<p style="font-size: 11px; color: #999;">Henüz taslak yok</p>';
+                return;
+            }
+            
+            draftList.innerHTML = '';
+            Object.entries(drafts).forEach(([name, draft]) => {
+                const draftItem = document.createElement('div');
+                draftItem.className = 'draft-item';
+                draftItem.innerHTML = `
+                    <div class="draft-item-name">${name}</div>
+                    <div class="draft-item-date">${draft.savedAt}</div>
+                    <div class="draft-item-buttons">
+                        <button class="draft-btn-load" onclick="loadDraft('${name.replace(/'/g, "\\'")}')">Yükle</button>
+                        <button class="draft-btn-delete" onclick="deleteDraft('${name.replace(/'/g, "\\'")}')">Sil</button>
+                    </div>
+                `;
+                draftList.appendChild(draftItem);
+            });
+        }
+        
+        function loadDraft(draftName) {
+            const drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
+            if (!drafts[draftName]) {
+                alert('Taslak bulunamadı!');
+                return;
+            }
+            
+            const data = drafts[draftName].data;
+            document.getElementById('projectName').value = data.projectName || '';
+            document.getElementById('dateInput').value = data.dateInput || '';
+            document.getElementById('currencySelect').value = data.currency || 'TRY';
+            document.getElementById('notes').value = data.notes || '';
+            
+            // Ürünleri temizle
+            document.getElementById('productsBody').innerHTML = '';
+            
+            // Ürünleri yükle
+            data.products.forEach(product => {
+                addProduct();
+                const lastRow = document.querySelectorAll('#productsBody tr').pop();
+                lastRow.querySelector('.productName').value = product.name;
+                lastRow.querySelector('.quantity').value = product.quantity;
+                lastRow.querySelector('.costPrice').value = product.costPrice;
+                lastRow.querySelector('.percentage').value = product.percentage;
+                lastRow.querySelector('.unitPrice').value = product.unitPrice;
+                lastRow.querySelector('.totalPrice').value = product.total;
+            });
+            
+            calculateGrandTotal();
+            updateCurrency();
+            alert(draftName + ' taslağı yüklendi!');
+        }
+        
+        function deleteDraft(draftName) {
+            if (!confirm(draftName + ' taslağını silmek istediğinize emin misiniz?')) {
+                return;
+            }
+            
+            let drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
+            delete drafts[draftName];
+            localStorage.setItem('teklifDrafts', JSON.stringify(drafts));
+            alert(draftName + ' taslağı silindi!');
+            loadDraftsList();
+        }
+        
+        // Verileri LocalStorage'a Kaydet
+        function saveData() {
+            const formData = new FormData(document.getElementById('teklifForm'));
+            const data = {
+                projectName: document.getElementById('projectName').value,
+                dateInput: document.getElementById('dateInput').value,
+                currency: document.getElementById('currencySelect').value,
+                notes: document.getElementById('notes').value,
+                products: []
+            };
+            
+            document.querySelectorAll('#productsBody tr').forEach(row => {
+                data.products.push({
+                    name: row.querySelector('.productName').value,
+                    quantity: row.querySelector('.quantity').value,
+                    unitPrice: row.querySelector('.unitPrice').value,
+                    total: row.querySelector('.totalPrice').value
+                });
+            });
+            
+            localStorage.setItem('teklifData', JSON.stringify(data));
+            alert('Teklif başarıyla kaydedildi!');
+        }
+        
+        // Önceden Kaydedilen Verileri Yükle
+        function loadData() {
+            const saved = localStorage.getItem('teklifData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('projectName').value = data.projectName || '';
+                document.getElementById('dateInput').value = data.dateInput || '';
+                document.getElementById('currencySelect').value = data.currency || 'TRY';
+                document.getElementById('notes').value = data.notes || '';
+                
+                data.products.forEach(product => {
+                    addProduct();
+                    const lastRow = document.querySelectorAll('#productsBody tr').pop();
+                    lastRow.querySelector('.productName').value = product.name;
+                    lastRow.querySelector('.quantity').value = product.quantity;
+                    lastRow.querySelector('.unitPrice').value = product.unitPrice;
+                    lastRow.querySelector('.totalPrice').value = product.total;
+                });
+                
+                calculateGrandTotal();
+                updateCurrency();
+            }
+        }
+        
+        // Taslak Yönetimi Fonksiyonları
+        function saveDraftAs() {
+            const draftName = document.getElementById('draftName').value.trim();
+            if (!draftName) {
+                alert('Lütfen taslak adı girin!');
+                return;
+            }
+            
+            const data = {
+                projectName: document.getElementById('projectName').value,
+                dateInput: document.getElementById('dateInput').value,
+                currency: document.getElementById('currencySelect').value,
+                notes: document.getElementById('notes').value,
+                products: []
+            };
+            
+            document.querySelectorAll('#productsBody tr').forEach(row => {
+                data.products.push({
+                    name: row.querySelector('.productName').value,
+                    quantity: row.querySelector('.quantity').value,
+                    costPrice: row.querySelector('.costPrice').value,
+                    percentage: row.querySelector('.percentage').value,
+                    unitPrice: row.querySelector('.unitPrice').value,
+                    total: row.querySelector('.totalPrice').value
+                });
+            });
+            
+            let drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
+            drafts[draftName] = {
+                data: data,
+                savedAt: new Date().toLocaleString('tr-TR')
+            };
+            
+            localStorage.setItem('teklifDrafts', JSON.stringify(drafts));
+            document.getElementById('draftName').value = '';
+            alert(draftName + ' taslağı kaydedildi!');
+            loadDraftsList();
+        }
+        
+        function loadDraftsList() {
+            const drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
+            const draftList = document.getElementById('draftList');
+            
+            if (Object.keys(drafts).length === 0) {
+                draftList.innerHTML = '<p style="font-size: 11px; color: #999;">Henüz taslak yok</p>';
+                return;
+            }
+            
+            draftList.innerHTML = '';
+            Object.entries(drafts).forEach(([name, draft]) => {
+                const draftItem = document.createElement('div');
+                draftItem.className = 'draft-item';
+                draftItem.innerHTML = `
+                    <div class="draft-item-name">${name}</div>
+                    <div class="draft-item-date">${draft.savedAt}</div>
+                    <div class="draft-item-buttons">
+                        <button class="draft-btn-load" onclick="loadDraft('${name.replace(/'/g, "\\'")}')">Yükle</button>
+                        <button class="draft-btn-delete" onclick="deleteDraft('${name.replace(/'/g, "\\'")}')">Sil</button>
+                    </div>
+                `;
+                draftList.appendChild(draftItem);
+            });
+        }
+        
+        function loadDraft(draftName) {
+            const drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
+            if (!drafts[draftName]) {
+                alert('Taslak bulunamadı!');
+                return;
+            }
+            
+            const data = drafts[draftName].data;
+            document.getElementById('projectName').value = data.projectName || '';
+            document.getElementById('dateInput').value = data.dateInput || '';
+            document.getElementById('currencySelect').value = data.currency || 'TRY';
+            document.getElementById('notes').value = data.notes || '';
+            
+            // Ürünleri temizle
+            document.getElementById('productsBody').innerHTML = '';
+            
+            // Ürünleri yükle
+            data.products.forEach(product => {
+                addProduct();
+                const lastRow = document.querySelectorAll('#productsBody tr').pop();
+                lastRow.querySelector('.productName').value = product.name;
+                lastRow.querySelector('.quantity').value = product.quantity;
+                lastRow.querySelector('.costPrice').value = product.costPrice;
+                lastRow.querySelector('.percentage').value = product.percentage;
+                lastRow.querySelector('.unitPrice').value = product.unitPrice;
+                lastRow.querySelector('.totalPrice').value = product.total;
+            });
+            
+            calculateGrandTotal();
+            updateCurrency();
+            alert(draftName + ' taslağı yüklendi!');
+        }
+        
+        function deleteDraft(draftName) {
+            if (!confirm(draftName + ' taslağını silmek istediğinize emin misiniz?')) {
+                return;
+            }
+            
+            let drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
+            delete drafts[draftName];
+            localStorage.setItem('teklifDrafts', JSON.stringify(drafts));
+            alert(draftName + ' taslağı silindi!');
+            loadDraftsList();
+        }
+        
+        // Sayfa Yüklendiğinde
+        window.addEventListener('load', () => {
+            loadData();
+            if (document.querySelectorAll('#productsBody tr').length === 0) {
+                addProduct();
+            }
+            updateCurrency();
+            loadDraftsList();
+        });
+
+        window.addEventListener('beforeprint', () => {
+            toggleProjectInlineForPrint(true);
+            const notes = document.getElementById('notes').value.trim();
+            if (!notes) {
+                document.getElementById('notes').style.display = 'none';
+                document.querySelector('.notes-section h3').style.display = 'none';
+            }
+        });
+
+        window.addEventListener('afterprint', () => {
+            toggleProjectInlineForPrint(false);
+            document.getElementById('notes').style.display = '';
+            document.querySelector('.notes-section h3').style.display = '';
+        });
+    </script>
+</body>
+</html>
