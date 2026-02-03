@@ -4,7 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teklif Formu - Serafettin Tezer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
+        :root {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: white;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --border-color: #ddd;
+            --table-header: #f8f9fa;
+            --input-bg: white;
+            --button-bg: #007bff;
+            --button-text: white;
+        }
+        
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --border-color: #444;
+            --table-header: #3a3a3a;
+            --input-bg: #3a3a3a;
+            --button-bg: #0056b3;
+            --button-text: #e0e0e0;
+        }
         * {
             margin: 0;
             padding: 0;
@@ -13,16 +39,66 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-secondary);
             padding: 40px;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .offer-number {
+            text-align: right;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .signature-area {
+            display: none;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .signature-boxes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 10px;
+        }
+        
+        .signature-box {
+            text-align: center;
+        }
+        
+        .signature-line {
+            border-top: 1px solid #000;
+            margin-top: 40px;
+            padding-top: 8px;
+            font-size: 11px;
         }
         
         .header {
@@ -30,7 +106,7 @@
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 30px;
-            border-bottom: 2px solid #ddd;
+            border-bottom: 2px solid var(--border-color);
             padding-bottom: 20px;
             position: relative;
         }
@@ -182,10 +258,13 @@
         textarea {
             width: 100%;
             padding: 8px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 12px;
             font-family: Arial, sans-serif;
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         
         textarea {
@@ -200,19 +279,20 @@
         }
         
         .products-table thead {
-            background-color: #f8f9fa;
+            background-color: var(--table-header);
         }
         
         .products-table th {
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             padding: 6px;
             text-align: left;
             font-weight: bold;
             font-size: 11px;
+            color: var(--text-primary);
         }
         
         .products-table td {
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             padding: 4px;
             font-size: 11px;
         }
@@ -447,7 +527,6 @@
         }
         
         .draft-list {
-            display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 8px;
         }
@@ -693,6 +772,14 @@
                 font-size: 11px;
             }
             
+            .btn-excel {
+                background-color: #217346;
+            }
+            
+            .btn-pdf {
+                background-color: #d32f2f;
+            }
+            
             .form-group {
                 grid-template-columns: 1fr;
                 gap: 10px;
@@ -739,6 +826,14 @@
                 text-align: right !important;
                 font-size: 11px !important;
             }
+            .header-right .date {
+                margin-bottom: 5px !important;
+            }
+            .offer-number {
+                font-size: 11px !important;
+                text-align: right !important;
+                margin-top: 3px !important;
+            }
             .company-logo {
                 width: 250px !important;
             }
@@ -758,6 +853,15 @@
                 font-size: 14px !important;
                 font-weight: bold !important;
                 padding: 0 !important;
+            }
+            .signature-area {
+                display: block !important;
+            }
+            .theme-toggle {
+                display: none !important;
+            }
+            .offer-counter {
+                display: none !important;
             }
             .action-buttons {
                 display: none;
@@ -814,12 +918,18 @@
                     <label for="projectName">Proje Adı:</label>
                     <input type="text" id="projectName" name="projectName">
                 </div>
+                <div class="offer-counter" style="margin-top: 5px; font-size: 11px; text-align: center;">
+                    <label for="offerCounterInput" style="margin-right: 5px;">Sayaç:</label>
+                    <input type="number" id="offerCounterInput" min="1" value="1" style="width: 60px; padding: 3px; text-align: center;" onchange="updateOfferNumber()">
+                    <button type="button" onclick="updateOfferNumber()" style="margin-left: 5px; padding: 3px 8px; font-size: 11px; cursor: pointer;">✔ Uygula</button>
+                </div>
             </div>
             <div class="header-right">
                 <div class="date">
                     Tarih:
                     <input type="date" id="dateInput" name="dateInput">
                 </div>
+                <div class="offer-number" id="offerNumber">Teklif No: TEK-2026-001</div>
                 <div class="currency-select">
                     Para Birimi:
                     <select id="currencySelect" name="currencySelect" onchange="updateCurrency()">
@@ -922,19 +1032,36 @@
                 <h3>📋 Taslak Yönetimi</h3>
                 <div class="draft-controls">
                     <input type="text" id="draftName" placeholder="Taslak adı girin (örn: Proje A)">
-                    <button onclick="saveDraftAs()">💾 Farklı Kaydet</button>
-                    <button onclick="loadDraftsList()">🔄 Listele</button>
+                    <button type="button" onclick="saveDraftAs()">💾 Farklı Kaydet</button>
+                    <button type="button" onclick="toggleDraftsList()">🔄 Listele</button>
                 </div>
-                <div class="draft-list" id="draftList"></div>
+                <div class="draft-list" id="draftList" style="display: none;"></div>
+            </div>
+            
+            <!-- Signature Area (Print Only) -->
+            <div class="signature-area">
+                <h3>İmza ve Onay</h3>
+                <div class="signature-boxes">
+                    <div class="signature-box">
+                        <div class="signature-line">Teklifi Hazırlayan<br>Ad Soyad / İmza</div>
+                    </div>
+                    <div class="signature-box">
+                        <div class="signature-line">Teklifi Kabul Eden<br>Ad Soyad / İmza</div>
+                    </div>
+                </div>
             </div>
             
             <!-- Action Buttons -->
             <div class="action-buttons">
                 <button type="button" class="btn btn-save" onclick="saveData()">💾 Kaydet</button>
                 <button type="button" class="btn btn-print" onclick="window.print()">🖨️ Yazdır</button>
+                <button type="button" class="btn btn-pdf" onclick="downloadPDF()">📄 PDF İndir</button>
+                <button type="button" class="btn btn-excel" onclick="exportToExcel()">📊 Excel'e Aktar</button>
                 <button type="reset" class="btn btn-reset">🔄 Sıfırla</button>
             </div>
         </form>
+        
+        <button class="theme-toggle" onclick="toggleTheme()" title="Tema Değiştir">🌓</button>
     </div>
     
     <script>
@@ -1134,12 +1261,27 @@
             localStorage.setItem('teklifDrafts', JSON.stringify(drafts));
             document.getElementById('draftName').value = '';
             alert(draftName + ' taslağı kaydedildi!');
-            loadDraftsList();
+            showDraftsList();
         }
         
-        function loadDraftsList() {
+        function toggleDraftsList() {
+            const draftList = document.getElementById('draftList');
+            const currentDisplay = window.getComputedStyle(draftList).display;
+            
+            // Toggle: Liste görünüyorsa gizle
+            if (currentDisplay !== 'none') {
+                draftList.style.display = 'none';
+            } else {
+                // Liste gizliyse göster ve yükle
+                showDraftsList();
+            }
+        }
+        
+        function showDraftsList() {
             const drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
             const draftList = document.getElementById('draftList');
+            
+            draftList.style.display = 'grid';
             
             if (Object.keys(drafts).length === 0) {
                 draftList.innerHTML = '<p style="font-size: 11px; color: #999;">Henüz taslak yok</p>';
@@ -1154,8 +1296,8 @@
                     <div class="draft-item-name">${name}</div>
                     <div class="draft-item-date">${draft.savedAt}</div>
                     <div class="draft-item-buttons">
-                        <button class="draft-btn-load" onclick="loadDraft('${name.replace(/'/g, "\\'")}')">Yükle</button>
-                        <button class="draft-btn-delete" onclick="deleteDraft('${name.replace(/'/g, "\\'")}')">Sil</button>
+                        <button type="button" class="draft-btn-load" onclick="loadDraft('${name.replace(/'/g, "\\'")}')">Yükle</button>
+                        <button type="button" class="draft-btn-delete" onclick="deleteDraft('${name.replace(/'/g, "\\'")}')">Sil</button>
                     </div>
                 `;
                 draftList.appendChild(draftItem);
@@ -1181,7 +1323,8 @@
             // Ürünleri yükle
             data.products.forEach(product => {
                 addProduct();
-                const lastRow = document.querySelectorAll('#productsBody tr').pop();
+                const rows = document.querySelectorAll('#productsBody tr');
+                const lastRow = rows[rows.length - 1];
                 lastRow.querySelector('.productName').value = product.name;
                 lastRow.querySelector('.quantity').value = product.quantity;
                 lastRow.querySelector('.costPrice').value = product.costPrice;
@@ -1204,7 +1347,7 @@
             delete drafts[draftName];
             localStorage.setItem('teklifDrafts', JSON.stringify(drafts));
             alert(draftName + ' taslağı silindi!');
-            loadDraftsList();
+            showDraftsList();
         }
         
         // Verileri LocalStorage'a Kaydet
@@ -1255,124 +1398,184 @@
             }
         }
         
-        // Taslak Yönetimi Fonksiyonları
-        function saveDraftAs() {
-            const draftName = document.getElementById('draftName').value.trim();
-            if (!draftName) {
-                alert('Lütfen taslak adı girin!');
-                return;
-            }
-            
-            const data = {
-                projectName: document.getElementById('projectName').value,
-                dateInput: document.getElementById('dateInput').value,
-                currency: document.getElementById('currencySelect').value,
-                notes: document.getElementById('notes').value,
-                products: []
-            };
-            
-            document.querySelectorAll('#productsBody tr').forEach(row => {
-                data.products.push({
-                    name: row.querySelector('.productName').value,
-                    quantity: row.querySelector('.quantity').value,
-                    costPrice: row.querySelector('.costPrice').value,
-                    percentage: row.querySelector('.percentage').value,
-                    unitPrice: row.querySelector('.unitPrice').value,
-                    total: row.querySelector('.totalPrice').value
-                });
-            });
-            
-            let drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
-            drafts[draftName] = {
-                data: data,
-                savedAt: new Date().toLocaleString('tr-TR')
-            };
-            
-            localStorage.setItem('teklifDrafts', JSON.stringify(drafts));
-            document.getElementById('draftName').value = '';
-            alert(draftName + ' taslağı kaydedildi!');
-            loadDraftsList();
-        }
-        
-        function loadDraftsList() {
-            const drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
-            const draftList = document.getElementById('draftList');
-            
-            if (Object.keys(drafts).length === 0) {
-                draftList.innerHTML = '<p style="font-size: 11px; color: #999;">Henüz taslak yok</p>';
-                return;
-            }
-            
-            draftList.innerHTML = '';
-            Object.entries(drafts).forEach(([name, draft]) => {
-                const draftItem = document.createElement('div');
-                draftItem.className = 'draft-item';
-                draftItem.innerHTML = `
-                    <div class="draft-item-name">${name}</div>
-                    <div class="draft-item-date">${draft.savedAt}</div>
-                    <div class="draft-item-buttons">
-                        <button class="draft-btn-load" onclick="loadDraft('${name.replace(/'/g, "\\'")}')">Yükle</button>
-                        <button class="draft-btn-delete" onclick="deleteDraft('${name.replace(/'/g, "\\'")}')">Sil</button>
-                    </div>
-                `;
-                draftList.appendChild(draftItem);
-            });
-        }
-        
-        function loadDraft(draftName) {
-            const drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
-            if (!drafts[draftName]) {
-                alert('Taslak bulunamadı!');
-                return;
-            }
-            
-            const data = drafts[draftName].data;
-            document.getElementById('projectName').value = data.projectName || '';
-            document.getElementById('dateInput').value = data.dateInput || '';
-            document.getElementById('currencySelect').value = data.currency || 'TRY';
-            document.getElementById('notes').value = data.notes || '';
-            
-            // Ürünleri temizle
-            document.getElementById('productsBody').innerHTML = '';
-            
-            // Ürünleri yükle
-            data.products.forEach(product => {
-                addProduct();
-                const lastRow = document.querySelectorAll('#productsBody tr').pop();
-                lastRow.querySelector('.productName').value = product.name;
-                lastRow.querySelector('.quantity').value = product.quantity;
-                lastRow.querySelector('.costPrice').value = product.costPrice;
-                lastRow.querySelector('.percentage').value = product.percentage;
-                lastRow.querySelector('.unitPrice').value = product.unitPrice;
-                lastRow.querySelector('.totalPrice').value = product.total;
-            });
-            
-            calculateGrandTotal();
-            updateCurrency();
-            alert(draftName + ' taslağı yüklendi!');
-        }
-        
-        function deleteDraft(draftName) {
-            if (!confirm(draftName + ' taslağını silmek istediğinize emin misiniz?')) {
-                return;
-            }
-            
-            let drafts = JSON.parse(localStorage.getItem('teklifDrafts')) || {};
-            delete drafts[draftName];
-            localStorage.setItem('teklifDrafts', JSON.stringify(drafts));
-            alert(draftName + ' taslağı silindi!');
-            loadDraftsList();
-        }
-        
         // Sayfa Yüklendiğinde
         window.addEventListener('load', () => {
+            generateOfferNumber();
             loadData();
             if (document.querySelectorAll('#productsBody tr').length === 0) {
                 addProduct();
             }
             updateCurrency();
-            loadDraftsList();
         });
+
+        // Tema Değiştir
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const btn = document.querySelector('.theme-toggle');
+            btn.textContent = newTheme === 'dark' ? '☀️' : '🌓';
+        }
+        
+        // Teklif Numarası Oluştur
+        function generateOfferNumber() {
+            let counter = parseInt(localStorage.getItem('offerCounter') || '1');
+            document.getElementById('offerCounterInput').value = counter;
+            
+            const year = new Date().getFullYear();
+            const offerNum = `TEK-${year}-${String(counter).padStart(3, '0')}`;
+            document.getElementById('offerNumber').textContent = `Teklif No: ${offerNum}`;
+            return offerNum;
+        }
+        
+        // Teklif Numarasını Güncelle
+        function updateOfferNumber() {
+            const counter = parseInt(document.getElementById('offerCounterInput').value);
+            if (counter > 0) {
+                localStorage.setItem('offerCounter', counter.toString());
+                const year = new Date().getFullYear();
+                const offerNum = `TEK-${year}-${String(counter).padStart(3, '0')}`;
+                document.getElementById('offerNumber').textContent = `Teklif No: ${offerNum}`;
+            }
+        }
+        
+        // PDF İndir
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            
+            // Geçici olarak butonları gizle
+            const buttons = document.querySelectorAll('.action-buttons, .draft-management, .theme-toggle, .offer-counter');
+            buttons.forEach(btn => btn.style.display = 'none');
+            
+            // İmza alanını göster
+            document.querySelector('.signature-area').style.display = 'block';
+            
+            // Print stillerini uygula
+            toggleProjectInlineForPrint(true);
+            
+            // Gizlenecek kolonları sakla
+            const costPriceCols = document.querySelectorAll('.cost-price-col, .percentage-col, .delete-col');
+            costPriceCols.forEach(col => col.style.display = 'none');
+            
+            // Para birimi seçimini gizle
+            const currencySelect = document.querySelector('.currency-select');
+            currencySelect.style.display = 'none';
+            
+            try {
+                const element = document.querySelector('.container');
+                
+                // Özel ayarlar
+                const canvas = await html2canvas(element, {
+                    scale: 2.5,
+                    useCORS: true,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    windowWidth: 1200,
+                    width: element.scrollWidth,
+                    height: element.scrollHeight,
+                    x: 0,
+                    y: 0
+                });
+                
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                
+                // Kenar boşlukları
+                const margin = 10;
+                const imgWidth = pdfWidth - (2 * margin);
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                let heightLeft = imgHeight;
+                let position = margin;
+                
+                pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                heightLeft -= (pdfHeight - 2 * margin);
+                
+                while (heightLeft > 0) {
+                    position = -(imgHeight - heightLeft) + margin;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                    heightLeft -= pdfHeight;
+                }
+                
+                const offerNum = document.getElementById('offerNumber').textContent.replace('Teklif No: ', '');
+                pdf.save(`Teklif_${offerNum}.pdf`);
+            } catch (error) {
+                alert('PDF oluşturulurken hata oluştu: ' + error.message);
+            } finally {
+                // Her şeyi eski haline getir
+                buttons.forEach(btn => btn.style.display = '');
+                document.querySelector('.signature-area').style.display = 'none';
+                toggleProjectInlineForPrint(false);
+                costPriceCols.forEach(col => col.style.display = '');
+                currencySelect.style.display = '';
+            }
+        }
+        
+        // Excel'e Aktar
+        function exportToExcel() {
+            const wb = XLSX.utils.book_new();
+            
+            // Teklif bilgileri
+            const info = [
+                ['Teklif Formu'],
+                [''],
+                ['Teklif No:', document.getElementById('offerNumber').textContent.replace('Teklif No: ', '')],
+                ['Proje Adı:', document.getElementById('projectName').value],
+                ['Tarih:', document.getElementById('dateInput').value],
+                ['Para Birimi:', document.getElementById('currencySelect').value],
+                ['']
+            ];
+            
+            // Ürün tablosu başlıkları
+            const headers = [['Ürün Adı', 'Adet', 'Birim', 'Alış Fiyatı', 'Yüzde (%)', 'Birim Fiyatı', 'Toplam']];
+            
+            // Ürünleri al
+            const products = [];
+            document.querySelectorAll('#productsBody tr').forEach(row => {
+                products.push([
+                    row.querySelector('.productName').value,
+                    row.querySelector('.quantity').value,
+                    'Adet',
+                    row.querySelector('.costPrice').value,
+                    row.querySelector('.percentage').value,
+                    row.querySelector('.unitPrice').value,
+                    row.querySelector('.totalPrice').value
+                ]);
+            });
+            
+            // Genel toplam
+            const total = [
+                [''],
+                ['Genel Toplam:', document.getElementById('grandTotal').value]
+            ];
+            
+            // Tüm verileri birleştir
+            const wsData = [...info, ...headers, ...products, ...total];
+            
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            
+            // Sütun genişliklerini ayarla
+            ws['!cols'] = [
+                { wch: 30 }, // Ürün Adı
+                { wch: 8 },  // Adet
+                { wch: 8 },  // Birim
+                { wch: 12 }, // Alış Fiyatı
+                { wch: 10 }, // Yüzde
+                { wch: 12 }, // Birim Fiyatı
+                { wch: 12 }  // Toplam
+            ];
+            
+            XLSX.utils.book_append_sheet(wb, ws, 'Teklif');
+            
+            const offerNum = document.getElementById('offerNumber').textContent.replace('Teklif No: ', '');
+            XLSX.writeFile(wb, `Teklif_${offerNum}.xlsx`);
+        }
 
         window.addEventListener('beforeprint', () => {
             toggleProjectInlineForPrint(true);
@@ -1388,6 +1591,12 @@
             document.getElementById('notes').style.display = '';
             document.querySelector('.notes-section h3').style.display = '';
         });
+        
+        // Tema yükle
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        const themeBtn = document.querySelector('.theme-toggle');
+        if (themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌓';
     </script>
 </body>
 </html>
