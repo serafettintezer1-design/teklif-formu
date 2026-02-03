@@ -787,7 +787,8 @@
                 gap: 15px;
             }
             .products-table .cost-price-col,
-            .products-table .percentage-col {
+            .products-table .percentage-col,
+            .products-table .delete-col {
                 display: none;
             }
             .summary-row {
@@ -855,6 +856,7 @@
                             <th class="percentage-col">Yüzde (%)</th>
                             <th>Birim Fiyatı (<span class="currency-symbol">₺</span>)</th>
                             <th class="total-col">Toplam (<span class="currency-symbol">₺</span>)</th>
+                            <th class="delete-col" style="width: 50px;">İşlem</th>
                         </tr>
                     </thead>
                     <tbody id="productsBody">
@@ -973,6 +975,7 @@
                 <td class="percentage-col"><input type="number" placeholder="0" class="percentage" value="0" onchange="calculateUnitPrice(this)"></td>
                 <td><input type="number" placeholder="0.00" class="unitPrice" onchange="calculateTotal(this)"></td>
                 <td class="total-col"><input type="text" class="totalPrice" disabled style="background-color: #f8f9fa;"></td>
+                <td class="delete-col"><button type="button" class="delete-btn" onclick="deleteProduct(this)">×</button></td>
             `;
             updateCurrency();
         }
