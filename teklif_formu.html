@@ -297,6 +297,15 @@
             font-size: 11px;
         }
         
+        .products-table tbody tr {
+            transition: all 0.3s ease;
+        }
+        
+        .products-table tbody tr.moving {
+            background-color: rgba(0, 123, 255, 0.1);
+            transform: scale(1.02);
+        }
+        
         .products-table tbody td:first-child {
             width: 40%;
             max-width: 40%;
@@ -335,6 +344,26 @@
         
         .delete-btn:hover {
             background-color: #c82333;
+        }
+        
+        .move-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+            margin: 2px;
+        }
+        
+        .move-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        .move-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
         
         .add-product-btn {
@@ -960,13 +989,13 @@
                     <thead>
                         <tr>
                             <th>Ürün Adı</th>
-                            <th style="width: 40px;">Adet</th>
+                            <th style="width: 80px;">Adet</th>
                             <th>Birim</th>
                             <th class="cost-price-col">Alış Fiyatı (<span class="currency-symbol">₺</span>)</th>
                             <th class="percentage-col">Yüzde (%)</th>
                             <th>Birim Fiyatı (<span class="currency-symbol">₺</span>)</th>
                             <th class="total-col">Toplam (<span class="currency-symbol">₺</span>)</th>
-                            <th class="delete-col" style="width: 50px;">İşlem</th>
+                            <th class="delete-col" style="width: 100px;">İşlem</th>
                         </tr>
                     </thead>
                     <tbody id="productsBody">
@@ -1102,7 +1131,11 @@
                 <td class="percentage-col"><input type="number" placeholder="0" class="percentage" value="0" onchange="calculateUnitPrice(this)"></td>
                 <td><input type="number" placeholder="0.00" class="unitPrice" onchange="calculateTotal(this)"></td>
                 <td class="total-col"><input type="text" class="totalPrice" disabled style="background-color: #f8f9fa;"></td>
-                <td class="delete-col"><button type="button" class="delete-btn" onclick="deleteProduct(this)">×</button></td>
+                <td class="delete-col">
+                    <button type="button" class="move-btn" onclick="moveRowUp(this)" title="Yukarı taşı">▲</button>
+                    <button type="button" class="move-btn" onclick="moveRowDown(this)" title="Aşağı taşı">▼</button>
+                    <button type="button" class="delete-btn" onclick="deleteProduct(this)">×</button>
+                </td>
             `;
             updateCurrency();
         }
@@ -1214,6 +1247,38 @@
         function deleteProduct(button) {
             button.closest('tr').remove();
             calculateGrandTotal();
+        }
+        
+        // Satırı yukarı taşı
+        function moveRowUp(button) {
+            const row = button.closest('tr');
+            const previousRow = row.previousElementSibling;
+            
+            if (previousRow) {
+                row.classList.add('moving');
+                setTimeout(() => {
+                    row.parentNode.insertBefore(row, previousRow);
+                    setTimeout(() => {
+                        row.classList.remove('moving');
+                    }, 300);
+                }, 50);
+            }
+        }
+        
+        // Satırı aşağı taşı
+        function moveRowDown(button) {
+            const row = button.closest('tr');
+            const nextRow = row.nextElementSibling;
+            
+            if (nextRow) {
+                row.classList.add('moving');
+                setTimeout(() => {
+                    row.parentNode.insertBefore(nextRow, row);
+                    setTimeout(() => {
+                        row.classList.remove('moving');
+                    }, 300);
+                }, 50);
+            }
         }
 
         // Son ürünü çıkar
